@@ -1,0 +1,56 @@
+{%extends "base.html" %}
+{%load static %}
+
+{% block title %}Perfil de Usuario{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+<div class="page-title">
+<h4>Profile</h4>
+<h6>User Profile</h6>
+</div>
+</div>
+
+<div class="card">
+<div class="card-body">
+<div class="profile-set">
+<div class="profile-head">
+</div>
+<div class="profile-top">
+<div class="profile-content">
+<div class="profile-contentname">
+<h2>William Castillo</h2>
+<h4>Updates Your Photo and Personal Details.</h4>
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-lg-6 col-sm-12">
+<div class="form-group">
+<label>Nombre completo</label>
+<input type="text" placeholder="Nombre completo">
+</div>
+</div>
+<div class="col-lg-6 col-sm-12">
+<div class="form-group">
+<label>email</label>
+<input type="email" placeholder="nombre@ejemplo.com">
+</div>
+</div>
+<div class="col-lg-6 col-sm-12">
+<div class="form-group">
+<label>Contraseña</label>
+<input type="password" placeholder="Contraseña">
+</div>
+</div>
+<div class="col-12">
+<a href="javascript:void(0);" class="btn btn-submit me-2">Guardar</a>
+<a href="javascript:void(0);" class="btn btn-cancel">Cancelar</a>
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}

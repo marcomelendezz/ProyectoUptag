@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .form import ProductoForm
 from .models import usuario
+from .models import Producto
 
 # Create your views here.
 
@@ -37,7 +38,8 @@ def index(request):
 
 #Urls Inventario
 def productlist(request):
-    return render(request, 'pages/inventario.html')
+    productos = Producto.objects.all()
+    return render(request, 'pages/inventario.html' , {'productos': productos} )
 
 def addproduct(request):
     if request.method == 'POST':
@@ -84,6 +86,11 @@ def addexpense(request):
 
 def expensecategory(request):
     return render(request,'expensecategory.html' )
+
+#Urls Perfil
+
+def profile(request):
+    return render(request,'pages/perfil.html' )
 
 def Hello(request):
     return HttpResponse("Hola")

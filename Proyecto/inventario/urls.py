@@ -23,4 +23,7 @@ urlpatterns = [
     path("expenselist/", views.expenselist, name = "expenselist"),
     path("addexpense/", views.addexpense, name = "addexpense"),
     path("expensecategory/", views.expensecategory, name = "expensecategory"),
+
+    #Urls Perfil
+    path("profile/", views.profile, name = "profile"),
 ]
