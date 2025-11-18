@@ -85,6 +85,11 @@ def addexpense(request):
 def expensecategory(request):
     return render(request,'expensecategory.html' )
 
+#Urls Perfil
+
+def profile(request):
+    return render(request,'pages/perfil.html' )
+
 def Hello(request):
     return HttpResponse("Hola")
 
