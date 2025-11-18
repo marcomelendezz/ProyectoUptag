@@ -67,6 +67,15 @@
 </thead>
 
 <tbody>
+{% for productos in producto %}
+<tr>
+<td>{{ productos.nombre }}</td>
+<td>{{ productos.precio_compra }}</td>
+<td>{{ productos.precio_venta }}</td>
+<td>{{ productos.stock }}</td>
+<td>{{ productos.proveedor }}</td>
+</tr>
+{% endfor %}
 </tbody>
 </table>
 </div>
