@@ -1,0 +1,41 @@
+{% extends "base_login_register.html" %}   
+{% load static %}
+{% block title %} Registarse {% endblock %}
+{% block content %} 
+<h1>Hola, aqui va el formulario de registro</h1>
+<div class="login-userheading">
+<h3>Crea una cuenta</h3>
+</div>
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="form-login">
+<label>Nombre Completo</label>
+<div class="form-addons">
+<input type="text" placeholder="Ingrese su nombre completo" id="nombre" name="nombre" required>
+<img src="{% static 'img/icons/users1.svg' %}" alt="img">
+</div>
+</div>
+<div class="form-login">
+<label>Correo Electrónico</label>
+<div class="form-addons">
+<input type="text" placeholder="Ingrese su correo electrónico" id="email" name="email" required>
+<img src="{% static 'img/icons/mail.svg' %}" alt="img">
+</div>
+</div>
+<div class="form-login">
+<label>Contraseña</label>
+<div class="pass-group">
+<input type="password" class="pass-input" placeholder="Ingrese su contraseña" id="contraseña" name="contraseña" required>
+<span class="fas toggle-password fa-eye-slash"></span>
+</div>
+</div>
+<div class="form-login">
+<button type="submit" class="btn btn-login">Registrarse</button >
+</div>
+</form>
+<div class="signinform text-center">
+<h4>¿Ya tienes una cuenta? <a href="signin.html" class="hover-a">Iniciar Sesión</a></h4>
+</div>
+{% endblock %}
+{% block css %}{% endblock %}
+{% block scripts %}{% endblock %}
