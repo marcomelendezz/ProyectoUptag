@@ -107,17 +107,10 @@ def addpurchase(request):
 def importpurchase(request):
     return render(request, 'importpurchase.html' )
 
-#Expensas
+#Clientes
 
-def expenselist(request):
-    return render(request,'expenselist.html' )
-
-def addexpense(request):
-    return render(request,'addexpense.html' )
-
-def expensecategory(request):
-    return render(request,'expensecategory.html' )
-
+def clientlist(request):
+    return render(request,'pages/clientlist.html' )
 #Urls Perfil
 
 def profile(request):
