@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from .form import ProductoForm
 from .models import usuario
 from .models import Producto
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -15,12 +16,18 @@ def signin(request):
             request, 
             username=request.POST.get('email'), 
             password=request.POST.get('contraseña'))
+        # Si la petición es AJAX (fetch/jQuery), devolver JSON
+        is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
         if user is None:
+            if is_ajax:
+                return JsonResponse({'success': False, 'errors': 'Credenciales inválidas'})
             return render(request, 'pages/Login.html', {'error': 'Credenciales inválidas'})
-        
-        else:
-            login(request, user)
-            return redirect('/')  # Redirige a la página principal después del inicio de sesión
+
+        # Usuario válido
+        login(request, user)
+        if is_ajax:
+            return JsonResponse({'success': True, 'redirect': '/'})
+        return redirect('/')  # Redirige a la página principal después del inicio de sesión
         
     return render(request, 'pages/Login.html' )
 def signup(request):
@@ -30,8 +37,27 @@ def signup(request):
         email = request.POST.get('email')
         contraseña = request.POST.get('contraseña')
             # Lógica para crear el usuario en la base de datos
-        nuevo_usuario = usuario(nombre=nombre, email=email, contraseña=contraseña)
+        # Evitar usuarios duplicados por email
+        is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
+        if User.objects.filter(username=email).exists():
+            # Si existe, devolver error
+            if is_ajax:
+                return JsonResponse({'success': False, 'errors': 'Usuario ya registrado con ese correo.'})
+            return render(request, 'pages/register.html', {'error': 'Usuario ya registrado con ese correo.'})
+
+        # Crear un User de Django (para poder usar authenticate/login después)
+        user = User(username=email, email=email)
+        user.set_password(contraseña)
+        user.save()
+
+        # Guardar en modelo local `usuario` (opcional). Guardamos contraseña hasheada.
+        from django.contrib.auth.hashers import make_password
+        nuevo_usuario = usuario(nombre=nombre, email=email, contraseña=make_password(contraseña))
         nuevo_usuario.save()
+
+        if is_ajax:
+            return JsonResponse({'success': True, 'redirect': '/signin/'})
+
         return redirect('signin')  # Redirige al inicio de sesión después del registro
     return render(request, 'pages/register.html' )
 

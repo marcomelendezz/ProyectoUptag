@@ -4,7 +4,6 @@
 {% block title %} Iniciar Sesión {% endblock %}
 
 {% block content %} 
-<h1>Hola, aqui va el formulario de login</h1>
 <div class="login-userheading">
 <h3>Iniciar Sesión</h3>
 </div>
@@ -32,4 +31,6 @@
 <h4>¿No tienes una cuenta? <a href="/signup" class="hover-a">Regístrate</a></h4>
 </div>
 {% endblock %}
-{% block scripts %}{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/login.js' %}"></script>
+{% endblock %}
