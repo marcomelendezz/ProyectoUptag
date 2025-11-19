@@ -12,4 +12,56 @@
 <h6>Agrega tu cliente</h6>
 </div>
 </div>
+
+<form action="" method="POST">
+{% csrf_token %}
+<div class="card">
+<div class="card-body">
+<div class="row">
+<div class="col-lg-3 col-sm-6 col-12">
+<div class="form-group">
+<label>Nombre del Producto</label>
+<input type="text" id="nombre" name="nombre" required>
+</div>
+</div>
+<div class="col-lg-3 col-sm-6 col-12">
+<div class="form-group">
+<label>Precio de Compra</label>
+<input type="text" id="precio_compra" name="precio_compra" required>
+</div>
+</div>
+<div class="col-lg-3 col-sm-6 col-12">
+<div class="form-group">
+<label>Precio de Venta</label>
+<input type="text" id="precio_venta" name="precio_venta" required>
+</div>
+</div>
+<div class="col-lg-3 col-sm-6 col-12">
+<div class="form-group">
+<label>Proveedor</label>
+<input type="text" id="proveedor_id" name="proveedor_id" >
+</div>
+</div>
+<div class="col-lg-3 col-sm-6 col-12">
+<div class="form-group">
+<label>Stock</label>
+<input type="text" id="cantidad_en_stock" name="cantidad_en_stock" required>
+</div>
+</div>
+<div class="col-lg-3 col-sm-6 col-12">
+<div class="form-group">
+<label>Descripcion del producto</label>
+<textarea name="descripcion" id="descripcion" required></textarea>
+</div>
+</div>
+<div class="col-lg-12">
+<div class="form-group"></div>
+<button type="submit" class="btn btn-submit me-2">Guardar Cliente</button>
+<a href="/clientlist" class="btn btn-cancel">Cancelar</a>
+</div>
+</div>
+</div>
+</div>
+</form>
+
 {% endblock %}
