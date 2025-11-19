@@ -19,7 +19,7 @@ urlpatterns = [
     path("purchaselist/", views.purchaselist, name = "purchaselist"),
     path("addpurchase/", views.addpurchase, name = "addpurchase"),
     path("importpurchase/", views.importpurchase, name = "importpurchase"),
-    #Expensas
+    #clientes
     path("clientlist/", views.clientlist, name = "clientlist"),
 
     #Urls Perfil
