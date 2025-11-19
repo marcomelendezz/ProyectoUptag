@@ -46,7 +46,9 @@ def signup(request):
             return render(request, 'pages/register.html', {'error': 'Usuario ya registrado con ese correo.'})
 
         # Crear un User de Django (para poder usar authenticate/login después)
-        user = User(username=email, email=email)
+        user = User(username= nombre, email=email)
+        # Guardar el nombre en first_name para mostrarlo en la plantilla
+        user.first_name = nombre or ''
         user.set_password(contraseña)
         user.save()
 

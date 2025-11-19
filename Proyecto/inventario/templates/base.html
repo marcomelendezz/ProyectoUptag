@@ -55,17 +55,20 @@
 <ul class="nav user-menu">
 <li class="nav-item dropdown has-arrow main-drop">
 <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
-<span class="user-img"><img src="{% static 'img/profiles/avator1.jpg' %}" alt="">
+<span class="user-img"><img src="{% static 'img/profiles/usuario.jpg' %}" alt="" style="width: 40px; height: 40px;">
 <span class="status online"></span></span>
 </a>
 <div class="dropdown-menu menu-drop-user">
 <div class="profilename">
 <div class="profileset">
-<span class="user-img"><img src="{% static 'img/profiles/avator1.jpg' %}" alt="">
+
 <span class="status online"></span></span>
 <div class="profilesets">
-<h6>{{ user.nombre }}</h6>
-<h5>Admin</h5>
+{% if user.is_authenticated %}
+	<h6>{{ user.first_name|default:user.username }}</h6>
+{% else %}
+	<h6>Invitado</h6>
+{% endif %}
 </div>
 </div>
 <hr class="m-0">
