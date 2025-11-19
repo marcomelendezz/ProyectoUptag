@@ -67,13 +67,20 @@
 </thead>
 
 <tbody>
-{% for productos in producto %}
+{% for producto in productos %}
 <tr>
-<td>{{ productos.nombre }}</td>
-<td>{{ productos.precio_compra }}</td>
-<td>{{ productos.precio_venta }}</td>
-<td>{{ productos.stock }}</td>
-<td>{{ productos.proveedor }}</td>
+<td>
+<label class="checkboxs">
+<input type="checkbox">
+<span class="checkmarks"></span>
+</label>
+</td>
+<td>{{ producto.nombre }}</td>
+<td>{{ producto.precio_compra }}</td>
+<td>{{ producto.precio_venta }}</td>
+<td>{{ producto.stock }}</td>
+<td>{{ producto.proveedor }}</td>
+<td></td>
 </tr>
 {% endfor %}
 </tbody>
@@ -81,5 +88,16 @@
 </div>
 </div>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+<script src="{% static 'js/inventario-datatable.js' %}"></script>
+
 
 {% endblock %}
