@@ -130,12 +130,10 @@
         }
 
         // Enlazar iconos de export (usa atributos title en el template)
-        // Primero: PDF -> abre diálogo de impresión listo para "Guardar como PDF"
-        $('.wordset a[title="pdf"]').on('click', function(e){ e.preventDefault(); printTable('pdf'); });
-        // Segundo: Excel -> descarga archivo compatible con Excel
-        $('.wordset a[title="excel"]').on('click', function(e){ e.preventDefault(); exportTableToExcel('inventario.xls'); });
-        // Tercero: Imprimir -> abrir diálogo de impresión normal
-        $('.wordset a[title="print"]').on('click', function(e){ e.preventDefault(); printTable('print'); });
+        // Usar delegación para asegurar que los clicks siempre se capturan
+        $(document).on('click', '.wordset a[title="pdf"], .wordset a.export-pdf', function(e){ e.preventDefault(); printTable('pdf'); });
+        $(document).on('click', '.wordset a[title="excel"], .wordset a.export-excel', function(e){ e.preventDefault(); exportTableToExcel('inventario.xls'); });
+        $(document).on('click', '.wordset a[title="print"], .wordset a.export-print', function(e){ e.preventDefault(); printTable('print'); });
 
     });
 })(jQuery);
