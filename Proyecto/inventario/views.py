@@ -111,6 +111,8 @@ def importpurchase(request):
 
 def clientlist(request):
     return render(request,'pages/clientlist.html' )
+def addclient(request):
+    return render(request,'pages/agregar_cliente.html' )
 #Urls Perfil
 
 def profile(request):

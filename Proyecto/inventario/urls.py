@@ -21,6 +21,7 @@ urlpatterns = [
     path("importpurchase/", views.importpurchase, name = "importpurchase"),
     #clientes
     path("clientlist/", views.clientlist, name = "clientlist"),
+    path("addclient/", views.addclient, name = "addclient"),
 
     #Urls Perfil
     path("profile/", views.profile, name = "profile"),
