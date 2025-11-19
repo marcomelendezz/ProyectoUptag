@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
 from .form import ProductoForm
 from .models import usuario
 from .models import Producto
@@ -10,16 +11,18 @@ from .models import Producto
 def signin(request):
     if request.method == 'POST':
         # Aquí iría la lógica para manejar el formulario de inicio de sesión
-        email = request.POST.get('email')
-        contraseña = request.POST.get('contraseña')
-        try:
-            user = usuario.objects.get(email=email, contraseña=contraseña)
-            # Lógica para iniciar sesión al usuario
-            return redirect('index')  # Redirige a la página principal después del inicio de sesión
-        except usuario.DoesNotExist:
-            # Manejar el caso en que el usuario no existe o las credenciales son incorrectas
-            return render(request, 'pages/login.html', {'error': 'Credenciales inválidas'})
-    return render(request, 'pages/login.html' )
+        user = authenticate(
+            request, 
+            username=request.POST.get('email'), 
+            password=request.POST.get('contraseña'))
+        if user is None:
+            return render(request, 'pages/Login.html', {'error': 'Credenciales inválidas'})
+        
+        else:
+            login(request, user)
+            return redirect('/')  # Redirige a la página principal después del inicio de sesión
+        
+    return render(request, 'pages/Login.html' )
 def signup(request):
     if request.method == 'POST':
         # Aquí iría la lógica para manejar el formulario de registro

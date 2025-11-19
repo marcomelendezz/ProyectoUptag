@@ -8,7 +8,8 @@
 <div class="login-userheading">
 <h3>Iniciar Sesión</h3>
 </div>
-<form action="" method="GET">
+<form action="" method="POST">
+{% csrf_token %}
 <div class="form-login">
 <label>Correo Electrónico</label>
 <div class="form-addons">
