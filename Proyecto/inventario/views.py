@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .form import ProductoForm
 from .models import usuario
 from .models import Producto
@@ -121,7 +123,67 @@ def expensecategory(request):
 #Urls Perfil
 
 def profile(request):
+    # Mostrar y actualizar el perfil del usuario autenticado
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect('signin')
+
+        nombre = request.POST.get('nombre','').strip()
+        email = request.POST.get('email','').strip()
+        password = request.POST.get('password','').strip()
+
+        user = request.user
+        # Guardar el email antiguo para localizar el registro local `usuario`
+        old_email = user.email
+        # Verificar si el email está en uso por otro usuario
+        if email and user.username != email and User.objects.filter(username=email).exclude(pk=user.pk).exists():
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'errors': 'El correo ya está en uso por otro usuario.'})
+            messages.error(request, 'El correo ya está en uso por otro usuario.')
+            return redirect('profile')
+
+        # Actualizar campos
+        if nombre:
+            user.first_name = nombre
+        if email:
+            user.username = email
+            user.email = email
+        if password:
+            user.set_password(password)
+        user.save()
+
+        # Actualizar modelo local `usuario` si existe
+        try:
+            # Buscar por el email antiguo; si no existe, intentar con el email nuevo
+            u = usuario.objects.filter(email=old_email).first()
+            if not u:
+                u = usuario.objects.filter(email=user.email).first()
+            if u:
+                u.nombre = user.first_name
+                if password:
+                    from django.contrib.auth.hashers import make_password
+                    u.contraseña = make_password(password)
+                u.email = user.email
+                u.save()
+        except Exception:
+            pass
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': True, 'message': 'Perfil actualizado'})
+
+        messages.success(request, 'Perfil actualizado correctamente')
+        return redirect('profile')
+
     return render(request,'pages/perfil.html' )
+
+
+def signout(request):
+    """Cerrar sesión del usuario y redirigir al signin."""
+    logout(request)
+    # Si es AJAX, devolver JSON
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': True, 'redirect': '/signin/'})
+    return redirect('signin')
 
 def Hello(request):
     return HttpResponse("Hola")
