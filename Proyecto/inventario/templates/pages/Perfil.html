@@ -26,6 +26,8 @@
 </div>
 </div>
 <div class="row">
+    <form action="" method="POST">
+    {% csrf_token %}
 <div class="col-lg-6 col-sm-12">
 <div class="form-group">
 <label>Nombre completo</label>
@@ -45,11 +47,11 @@
 </div>
 </div>
 <div class="col-12">
-<a href="javascript:void(0);" class="btn btn-submit me-2">Guardar</a>
+<button type="submit" class="btn btn-submit me-2">Guardar</button>
 <a href="javascript:void(0);" class="btn btn-cancel">Cancelar</a>
 </div>
 </div>
 </div>
 </div>
-
+</form>
 {% endblock %}
