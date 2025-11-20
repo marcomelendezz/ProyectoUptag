@@ -37,7 +37,7 @@
 </thead>
 
 <tbody>
-{% for producto in productos %}
+{% for cliente in clientes %}
 <tr>
 <td>
 <label class="checkboxs">
@@ -45,11 +45,11 @@
 <span class="checkmarks"></span>
 </label>
 </td>
-<td>{{ producto.nombre }}</td>
-<td>{{ producto.precio_compra }}</td>
-<td>{{ producto.precio_venta }}</td>
-<td>{{ producto.stock }}</td>
-<td>{{ producto.proveedor }}</td>
+<td>{{ cliente.nombre }}</td>
+<td>{{ cliente.email }}</td>
+<td>{{ cliente.telefono }}</td>
+<td>{{ cliente.direccion }}</td>
+<td>{{ cliente.dni }}</td>
 <td></td>
 </tr>
 {% endfor %}
