@@ -13,7 +13,7 @@
 <h6>Maneja tus Servicios</h6>
 </div>
 <div class="page-btn">
-<a href="/addclient" class="btn btn-added"><img src="{% static 'img/icons/plus.svg' %}" alt="img" class="me-1">Agregar Cliente</a>
+<a href="/addclient" class="btn btn-added"><img src="{% static 'img/icons/plus.svg' %}" alt="img" class="me-1">Agregar Servicio</a>
 </div>
 </div>
 
@@ -27,11 +27,9 @@
 <span class="checkmarks"></span>
 </label>
 </th>
-<th>Nombre del cliente</th>
-<th>Email</th>
-<th>telefono</th>
-<th>Direccion</th>
-<th>DNI/Cedula de identidad</th>
+<th>Nombre del Servicio</th>
+<th>Descripcion</th>
+<th>Precio</th>
 <th>Acción</th>
 </tr>
 </thead>
@@ -48,8 +46,7 @@
 <td>{{ cliente.nombre }}</td>
 <td>{{ cliente.email }}</td>
 <td>{{ cliente.telefono }}</td>
-<td>{{ cliente.direccion }}</td>
-<td>{{ cliente.dni }}</td>
+
 <td></td>
 </tr>
 {% endfor %}
@@ -58,6 +55,13 @@
 </div>
 </div>
 </div>
+{% block scripts %} 
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
 
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+<script src="{% static 'js/inventario-datatable.js' %}"></script>
+{% endblock %}
 
 {% endblock %}
