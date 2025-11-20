@@ -99,10 +99,10 @@ def salesreturnlist(request):
 def createsalesreturn(request):
     return render(request, 'createsalesreturn.html' )
 
-#Compras
+#Servicios
 
-def purchaselist(request):
-    return render(request, 'purchaselist.html' )
+def servicelist(request):
+    return render(request, 'pages/servicios.html' )
 
 def addpurchase(request):
     return render(request, 'addpurchase.html' )

@@ -15,10 +15,8 @@ urlpatterns = [
     path("newsale/", views.pos, name = "newsale"),
     path("salereturnlist/", views.salesreturnlist, name = "salesreturnlist"),
     path("createsalesreturn/", views.createsalesreturn, name = "createsalesreturn"),
-    #Urls Compras
-    path("purchaselist/", views.purchaselist, name = "purchaselist"),
-    path("addpurchase/", views.addpurchase, name = "addpurchase"),
-    path("importpurchase/", views.importpurchase, name = "importpurchase"),
+    #Urls Servicios
+    path("servicelist/", views.servicelist, name = "servicelist"),
     #clientes
     path("clientlist/", views.clientlist, name = "clientlist"),
     path("addclient/", views.addclient, name = "addclient"),
