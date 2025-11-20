@@ -104,8 +104,8 @@ def createsalesreturn(request):
 def servicelist(request):
     return render(request, 'pages/servicios.html' )
 
-def addpurchase(request):
-    return render(request, 'addpurchase.html' )
+def addservice(request):
+    return render(request, 'pages/agregar_servicio.html' )
 
 def importpurchase(request):
     return render(request, 'importpurchase.html' )

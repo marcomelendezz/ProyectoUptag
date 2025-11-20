@@ -17,6 +17,7 @@ urlpatterns = [
     path("createsalesreturn/", views.createsalesreturn, name = "createsalesreturn"),
     #Urls Servicios
     path("servicelist/", views.servicelist, name = "servicelist"),
+    path("addservice/", views.addservice, name = "addservice"),
     #clientes
     path("clientlist/", views.clientlist, name = "clientlist"),
     path("addclient/", views.addclient, name = "addclient"),
