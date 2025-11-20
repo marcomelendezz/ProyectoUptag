@@ -11,6 +11,7 @@ class Cliente(models.Model):
     email = models.EmailField()
     telefono = models.CharField(max_length=15)
     direccion = models.CharField(max_length=255)
+    dni = models.CharField(max_length=20, unique=True, null=True, blank=True)
 
 class Proveedor(models.Model):
     nombre = models.CharField(max_length=100)

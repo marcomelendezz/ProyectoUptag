@@ -19,10 +19,9 @@ urlpatterns = [
     path("purchaselist/", views.purchaselist, name = "purchaselist"),
     path("addpurchase/", views.addpurchase, name = "addpurchase"),
     path("importpurchase/", views.importpurchase, name = "importpurchase"),
-    #Expensas
-    path("expenselist/", views.expenselist, name = "expenselist"),
-    path("addexpense/", views.addexpense, name = "addexpense"),
-    path("expensecategory/", views.expensecategory, name = "expensecategory"),
+    #clientes
+    path("clientlist/", views.clientlist, name = "clientlist"),
+    path("addclient/", views.addclient, name = "addclient"),
 
     #Urls Perfil
     path("profile/", views.profile, name = "profile"),

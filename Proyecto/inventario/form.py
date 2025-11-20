@@ -13,3 +13,11 @@ class RegisterForm(forms.Form):
            from .models import usuario
            model = usuario
            fields = "__all__"
+
+
+# Formulario para el modelo Cliente
+class ClienteForm(forms.ModelForm):
+    class Meta:
+        from .models import Cliente
+        model = Cliente
+        fields = "__all__"

@@ -4,7 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from .form import ProductoForm
 from .models import usuario
 from .models import Producto
+from .models import Cliente
+from .form import ClienteForm
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 # Create your views here.
 
@@ -107,16 +110,24 @@ def addpurchase(request):
 def importpurchase(request):
     return render(request, 'importpurchase.html' )
 
-#Expensas
+#Clientes
 
-def expenselist(request):
-    return render(request,'expenselist.html' )
+def clientlist(request):
+    clientes = Cliente.objects.all()
+    return render(request,'pages/clientlist.html' , {'clientes': clientes} )
 
-def addexpense(request):
-    return render(request,'addexpense.html' )
-
-def expensecategory(request):
-    return render(request,'expensecategory.html' )
+def addclient(request):
+    if request.method == 'POST':
+        form_client = ClienteForm(request.POST)
+        if form_client.is_valid():
+            form_client.save()
+            messages.success(request, 'Cliente agregado correctamente.')
+            return redirect('clientlist')  # Redirige a la lista de clientes después de agregar
+        # Si el formulario no es válido, volver a mostrar con errores
+        return render(request, 'pages/agregar_cliente.html', {'form_client': form_client})
+    else:
+        form_client = ClienteForm()
+    return render(request, 'pages/agregar_cliente.html', {'form_client': form_client})
 
 #Urls Perfil
 
