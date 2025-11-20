@@ -134,6 +134,11 @@ def addclient(request):
 def profile(request):
     return render(request,'pages/perfil.html' )
 
+#Url Transacciones
+
+def transactiones(request):
+    return render(request, 'pages/transacciones.html')
+
 def Hello(request):
     return HttpResponse("Hola")
 
