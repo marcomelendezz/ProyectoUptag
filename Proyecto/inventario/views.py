@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from .form import ProductoForm
 from .models import usuario
 from .models import Producto
+from .form import ClienteForm
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -112,7 +113,15 @@ def importpurchase(request):
 def clientlist(request):
     return render(request,'pages/clientlist.html' )
 def addclient(request):
-    return render(request,'pages/agregar_cliente.html' )
+    if request.method == 'POST':
+        form_client = ClienteForm(request.POST)
+        if form_client.is_valid():
+            form_client.save()
+            return redirect('clientlist')  # Redirige a la lista de clientes después de agregar
+    else:
+        form_client = ClienteForm()
+    return render(request, 'pages/agregar_cliente.html', {'form_client': form_client})
+
 #Urls Perfil
 
 def profile(request):
