@@ -5,6 +5,8 @@ from .form import ProductoForm
 from .form import ClienteForm
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 from .form import ServicioForm
 from .models import *
 # Create your views here.
@@ -101,16 +103,23 @@ def createsalesreturn(request):
 
 def servicelist(request):
     servicios = Servicio.objects.all()
-    return render(request, 'pages/servicios.html' )
+    return render(request, 'pages/servicios.html'  , {'servicios': servicios} )
 
 def addservice(request):
     if request.method == 'POST':
             form_service = ServicioForm(request.POST)
+            is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
             if form_service.is_valid():
-                form_service.save()
+                servicio = form_service.save()
                 messages.success(request, 'Servicio agregado correctamente.')
-                return redirect('servicelist')  # Redirige a la lista de servicios después de agregar
-            # Si el formulario no es válido, volver a mostrar con errores
+                if is_ajax:
+                    return JsonResponse({'success': True, 'id': servicio.id, 'redirect': '/servicelist'})
+                return redirect('/servicelist')  # Redirige a la lista de servicios después de agregar
+            # Si el formulario no es válido, devolver errores JSON para AJAX o renderizar plantilla
+            if is_ajax:
+                # serialize form errors
+                errors = {field: [str(e) for e in errs] for field, errs in form_service.errors.items()}
+                return JsonResponse({'success': False, 'errors': errors}, status=400)
             return render(request, 'pages/agregar_servicio.html', {'form_service': form_service})
     else:
         form_service = ServicioForm()
