@@ -2,13 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from .form import ProductoForm
-from .models import usuario
-from .models import Producto
-from .models import Cliente
 from .form import ClienteForm
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from .form import ServicioForm
+from .models import *
 # Create your views here.
 
 #Autenticacion
@@ -102,10 +100,21 @@ def createsalesreturn(request):
 #Servicios
 
 def servicelist(request):
+    servicios = Servicio.objects.all()
     return render(request, 'pages/servicios.html' )
 
 def addservice(request):
-    return render(request, 'pages/agregar_servicio.html' )
+    if request.method == 'POST':
+            form_service = ServicioForm(request.POST)
+            if form_service.is_valid():
+                form_service.save()
+                messages.success(request, 'Servicio agregado correctamente.')
+                return redirect('servicelist')  # Redirige a la lista de servicios después de agregar
+            # Si el formulario no es válido, volver a mostrar con errores
+            return render(request, 'pages/agregar_servicio.html', {'form_service': form_service})
+    else:
+        form_service = ServicioForm()
+    return render(request, 'pages/agregar_servicio.html', {'form_service': form_service})
 
 def importpurchase(request):
     return render(request, 'importpurchase.html' )
