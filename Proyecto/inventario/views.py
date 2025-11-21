@@ -120,10 +120,13 @@ def addservice(request):
                 # serialize form errors
                 errors = {field: [str(e) for e in errs] for field, errs in form_service.errors.items()}
                 return JsonResponse({'success': False, 'errors': errors}, status=400)
-            return render(request, 'pages/agregar_servicio.html', {'form_service': form_service})
+            # include products for select price option
+            productos = Producto.objects.all()
+            return render(request, 'pages/agregar_servicio.html', {'form_service': form_service, 'productos': productos})
     else:
         form_service = ServicioForm()
-    return render(request, 'pages/agregar_servicio.html', {'form_service': form_service})
+    productos = Producto.objects.all()
+    return render(request, 'pages/agregar_servicio.html', {'form_service': form_service, 'productos': productos})
 
 def importpurchase(request):
     return render(request, 'importpurchase.html' )
