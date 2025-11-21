@@ -136,7 +136,7 @@ def profile(request):
 
 #Url Transacciones
 
-def transactiones(request):
+def transactions(request):
     return render(request, 'pages/transacciones.html')
 
 def Hello(request):

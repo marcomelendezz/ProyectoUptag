@@ -25,5 +25,5 @@ urlpatterns = [
     path("profile/", views.profile, name = "profile"),
 
     #Url Transacciones
-    path("transactions/", views.transactiones, name = "transactiones"),
+    path("transactions/", views.transactions, name = "transactiones"),
 ]
