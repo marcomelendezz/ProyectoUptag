@@ -33,7 +33,7 @@
             <tr>
                 <td>{{ servicio.nombre }}</td>
                 <td>{{ servicio.descripcion }}</td>
-                <td>{{ servicio.precio }}</td>
+                <td class="price-ves" data-price="{{ servicio.precio }}">{{ servicio.precio }} VES</td>
 
                 <td>
                     <a class="me-3" href="{% url 'edit_service' servicio.pk %}">
@@ -58,6 +58,7 @@
 
 
 <script src="{% static 'js/inventario-datatable.js' %}"></script>
+<script src="{% static 'js/currency_converter.js' %}"></script>
 {% endblock %}
 
 {% endblock %}

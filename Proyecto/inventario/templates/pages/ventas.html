@@ -42,56 +42,64 @@
 
 <div class="page-wrapper ms-0">
 	<div class="row">
-		<div class="col-lg-8 col-sm-12 tabs_wrapper">
-			<!-- Selector de servicio -->
-			<div class="mb-3">
-				<label for="servicio-select" class="form-label">Escoge el servicio:</label>
-				<select id="servicio-select" class="form-select">
-					<option value="">Selecciona un servicio</option>
-					{% for servicio in servicios %}
-					<option value="{{ servicio.id }}" data-precio="{{ servicio.precio }}">{{ servicio.nombre }}</option>
-					{% endfor %}
-				</select>
-			</div>
-			<!-- Selector de producto dependiente del servicio y botón -->
-			<div class="mb-3 d-flex align-items-end gap-2">
-				<div>
-					<label for="producto-select" class="form-label">Escoge el producto:</label>
-					<select id="producto-select" class="form-select">
-						<option value="">Selecciona un producto (Opcional)</option>
-						{% for producto in productos %}
-						<option value="{{ producto.id }}" data-precio="{{ producto.precio_venta }}"
-							data-nombre="{{ producto.nombre }}">
-							{{ producto.nombre }} (${{ producto.precio_venta }})
-						</option>
-						{% endfor %}
-					</select>
+		<div class="col-lg-5 col-sm-12">
+			<div class="card">
+				<div class="card-body">
+					<!-- Selector de servicio -->
+					<div class="mb-3">
+						<label for="servicio-select" class="form-label">Servicio</label>
+						<select id="servicio-select" class="form-select">
+							<option value="">Selecciona un servicio</option>
+							{% for servicio in servicios %}
+							<option value="{{ servicio.id }}" data-precio="{{ servicio.precio }}">{{ servicio.nombre }}
+							</option>
+							{% endfor %}
+						</select>
+					</div>
+					<!-- Selector de producto y cantidad -->
+					<div class="row mb-3">
+						<div class="col-8">
+							<label for="producto-select" class="form-label">Producto (Opcional)</label>
+							<select id="producto-select" class="form-select">
+								<option value="">Selecciona un producto</option>
+								{% for producto in productos %}
+								<option value="{{ producto.id }}" data-precio="{{ producto.precio_venta }}"
+									data-nombre="{{ producto.nombre }}">
+									{{ producto.nombre }}
+								</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="col-4">
+							<label for="cantidad-input" class="form-label">Cant.</label>
+							<input type="number" id="cantidad-input" class="form-control" min="1">
+						</div>
+					</div>
+					<div class="d-grid">
+						<button type="button" id="agregar-lista" class="btn btn-success btn-block">Agregar a la
+							lista</button>
+					</div>
 				</div>
-				<button type="button" id="agregar-lista" class="btn btn-success btn-sm mb-1">Agregar a la lista</button>
 			</div>
 		</div>
-		<div class="col-lg-4 col-sm-12">
+
+		<div class="col-lg-7 col-sm-12">
 			<div class="card pos-card">
-				<div class="card-header pos-header d-flex justify-content-between align-items-center">
-					<div class="col-lg-8 col-sm-12">
-						<h5 class="mb-0">Punto de Venta</h5>
-					</div>
-					<div class="col-lg-4 col-sm-12">
-					</div>
+				<div class="card-header pos-header">
+					<h5 class="mb-0">Lista de Venta</h5>
 				</div>
-				<div class="split-card"></div>
-				<div class="card-body pt-0 pb-2">
+				<div class="card-body pt-3 pb-2">
 					<!-- Tabla de lista de compra -->
 					<div class="mb-3">
-						<h6 class="mb-2">Lista de compra</h6>
 						<div class="table-responsive">
 							<table class="table table-bordered" id="tabla-lista-compra">
 								<thead>
 									<tr>
 										<th>Servicio</th>
 										<th>Producto</th>
+										<th style="width: 70px;">Cant.</th>
 										<th>Precio</th>
-										<th>Quitar</th>
+										<th style="width: 50px;"></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -100,22 +108,23 @@
 							</table>
 						</div>
 					</div>
-					<div class="mb-3">
-						<strong>Total a pagar: $<span id="total-pagar">0.00</span></strong>
-					</div>
-					<div class="setvaluecash mb-3">
-						<label for="metodo-pago" class="form-label">Método de pago:</label>
-						<select id="metodo-pago" class="form-select form-select-sm">
-							<option value="efectivo">Efectivo</option>
-							<option value="debito">Débito</option>
-							<option value="pago_movil">Pago Móvil</option>
-						</select>
-					</div>
-					<div class="btn-totallabel d-flex align-items-center gap-2">
-						<h5>Checkout</h5>
-						<h6><span id="total-pagar">0.00$</span></h6>
-						<button type="button" id="btn-checkout" class="btn btn-primary btn-sm ms-2">Procesar
-							venta</button>
+					<div class="row align-items-center">
+						<div class="col-6">
+							<strong>Total: <span id="total-pagar-ves">0.00 VES</span></strong>
+							<div class="text-muted small" id="total-pagar-usd">($0.00 USD)</div>
+						</div>
+						<div class="col-6 text-end">
+							<div class="setvaluecash mb-2">
+								<select id="metodo-pago" class="form-select form-select-sm">
+									<option value="efectivo">Efectivo</option>
+									<option value="debito">Débito</option>
+									<option value="pago_movil">Pago Móvil</option>
+								</select>
+							</div>
+							<button type="button" id="btn-checkout" class="btn btn-primary btn-sm w-100">
+								<b>Procesar Venta</b>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -129,6 +138,7 @@
 <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
 
 <script src="{% static 'js/ventas.js' %}"></script>
+<script src="{% static 'js/currency_converter.js' %}"></script>
 <script>
 	// --- Autocompletar cliente por DNI ---
 	document.getElementById('dni').addEventListener('blur', function () {
@@ -170,7 +180,7 @@
 					data.productos.forEach(prod => {
 						const option = document.createElement('option');
 						option.value = prod.id;
-						option.text = `${prod.nombre} ($${prod.precio})`;
+						option.text = prod.nombre; // Limpiado el precio del texto
 						option.dataset.precio = prod.precio;
 						option.dataset.nombre = prod.nombre;
 						if (prod.predeterminado) {
@@ -189,36 +199,66 @@
 	// --- Manejo de la lista de compra ---
 	window.listaCompra = [];
 
+	function safeParseFloat(val) {
+		const parsed = parseFloat(val);
+		return isNaN(parsed) ? 0 : parsed;
+	}
+
 	document.getElementById('agregar-lista').addEventListener('click', function () {
 		const servicioSelect = document.getElementById('servicio-select');
 		const productoSelect = document.getElementById('producto-select');
+		const cantidadInput = document.getElementById('cantidad-input');
 
 		const servicioId = servicioSelect.value;
-		const servicioNombre = servicioSelect.options[servicioSelect.selectedIndex].text;
-		const servicioPrecio = parseFloat(servicioSelect.options[servicioSelect.selectedIndex].dataset.precio || 0);
-
-		const productoId = productoSelect.value;
-		const productoNombre = productoId ? productoSelect.options[productoSelect.selectedIndex].dataset.nombre : 'N/A';
-		const productoPrecio = productoId ? parseFloat(productoSelect.options[productoSelect.selectedIndex].dataset.precio || 0) : 0;
-
 		if (!servicioId) {
-			alert('Selecciona al menos un servicio.');
+			Swal.fire('Error', 'Selecciona al menos un servicio.', 'error');
 			return;
 		}
+
+		const selectedServicio = servicioSelect.options[servicioSelect.selectedIndex];
+		const servicioNombre = selectedServicio.text;
+		const servicioPrecio = safeParseFloat(selectedServicio.dataset.precio);
+
+		const productoId = productoSelect.value;
+		let productoNombre = 'N/A';
+		let productoPrecio = 0;
+
+		if (productoId && productoSelect.selectedIndex >= 0) {
+			const selectedProducto = productoSelect.options[productoSelect.selectedIndex];
+			productoNombre = selectedProducto.dataset.nombre || 'N/A';
+			productoPrecio = safeParseFloat(selectedProducto.dataset.precio);
+		}
+
+		const cantidad = parseInt(cantidadInput.value) || 1;
+
+		// Lógica de precio: Si el servicio tiene precio (> 0), se cobra solo el precio del servicio.
+		// Si el servicio no tiene precio (0), se cobra el precio del producto.
+		let precioUnitario = 0;
+		if (servicioPrecio > 0) {
+			precioUnitario = servicioPrecio;
+		} else {
+			precioUnitario = productoPrecio;
+		}
+
+		const precioFinal = precioUnitario * cantidad;
 
 		const item = {
 			servicio_id: servicioId,
 			servicio_nombre: servicioNombre,
 			producto_id: productoId || null,
 			producto_nombre: productoNombre,
-			precio: servicioPrecio + productoPrecio
+			cantidad: cantidad,
+			precio: precioFinal
 		};
 
 		window.listaCompra.push(item);
 		actualizarTabla();
+
+		// Reset cantidad to 1
+		cantidadInput.value = 1;
 	});
 
-	function actualizarTabla() {
+	async function actualizarTabla() {
 		const tbody = document.querySelector('#tabla-lista-compra tbody');
 		tbody.innerHTML = '';
 		let total = 0;
@@ -229,16 +269,31 @@
 				<tr>
 					<td>${item.servicio_nombre}</td>
 					<td>${item.producto_nombre}</td>
-					<td>$${item.precio.toFixed(2)}</td>
-					<td><button class="btn btn-danger btn-sm" onclick="quitarItem(${index})">X</button></td>
+					<td class="text-center">${item.cantidad}</td>
+					<td class="text-end">${item.precio.toFixed(2)}</td>
+					<td class="text-center">
+                        <button class="btn btn-sm" onclick="quitarItem(${index})">
+                            <img src="/static/img/icons/delete.svg" width="15" alt="img">
+                        </button>
+                    </td>
 				</tr>
 			`;
 			tbody.innerHTML += row;
 		});
 
-		document.getElementById('total-pagar').innerText = total.toFixed(2);
-		// Actualizar el total en el checkout también
-		document.querySelectorAll('#total-pagar').forEach(el => el.innerText = total.toFixed(2) + '$');
+		document.getElementById('total-pagar-ves').innerText = total.toFixed(2) + ' VES';
+
+		// Actualización en tiempo real de BCV
+		const rate = await CurrencyConverter.getExchangeRate();
+		if (rate && rate > 0) {
+			const totalUsd = total / rate;
+			const totalUsdFormatted = CurrencyConverter.formatCurrency(totalUsd, 'USD');
+			document.getElementById('total-pagar-usd').innerText = `(${totalUsdFormatted} USD)`;
+			document.getElementById('total-pagar-usd-badge').innerText = `(${totalUsdFormatted} USD)`;
+		}
+
+		// Actualizar el total en el badge del checkout
+		document.getElementById('total-pagar-ves-badge').innerText = total.toFixed(2) + ' VES';
 	}
 
 	window.quitarItem = function (index) {

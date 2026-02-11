@@ -18,9 +18,10 @@
 <form action="{% url 'login' %}" method="POST" id="login-form">
     {% csrf_token %}
     <div class="form-login">
-        <label>Correo Electrónico</label>
+        <label>Nombre completo o correo electrónico</label>
         <div class="form-addons">
-            <input type="text" placeholder="Ingrese su usuario" id="username" name="username" required>
+            <input type="text" placeholder="Ingrese su nombre completo o correo electrónico" id="username"
+                name="username" required>
             {% if form.username.errors %}
             <div class="text-danger small mt-1">
                 {% for error in form.username.errors %}

@@ -38,8 +38,9 @@ urlpatterns = [
     path("addclient/", views.addclient, name = "addclient"),
     path("edit_client/<int:pk>/", views.edit_client, name = "edit_client"),
     path("delete_client/<int:pk>/", views.delete_client, name = "delete_client"),
-    #Url Transacciones
+    #Transacciones
     path("transactions/", views.transactions, name = "transactions"),
-    #Urls Perfil
+    #Url Perfil
     path("profile/", views.profile, name = "profile"),
-]
+    path("profile/edit/", views.edit_profile, name = "edit_profile"),
+    ]

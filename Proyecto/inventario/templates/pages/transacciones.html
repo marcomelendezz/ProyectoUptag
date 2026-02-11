@@ -1,59 +1,131 @@
-{%extends "base.html" %}
-{%load static %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block title %}Transacciones{% endblock %}
-
-{% block content %}
-<h1>Transacciones</h1>
-
-<div class="table-responsive">
-    <table id="tabla-transacciones" class="table datanew">
-        <thead>
-            <tr>
-                <th>
-                    <label class="checkboxs">
-                        <input type="checkbox" id="select-all">
-                        <span class="checkmarks"></span>
-                    </label>
-                </th>
-                <th>Nombre del Cliente</th>
-                <th>Cédula (DNI)</th>
-                <th>Fecha</th>
-                <th>Método de pago</th>
-                <th>Pago</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for transaccion in transacciones %}
-            <tr>
-                <td>
-                    <label class="checkboxs">
-                        <input type="checkbox">
-                        <span class="checkmarks"></span>
-                    </label>
-                </td>
-                <td>{{ transaccion.id_cliente.nombre }}</td>
-                <td> {{ transaccion.id_cliente.dni }}</td>
-                <td>{{ transaccion.fecha }}</td>
-                <td>{{ transaccion.motivo }}</td>
-                <td>{{ transaccion.total }}</td>
-
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-</div>
-</div>
-
-
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/bootstrap-datetimepicker.min.css' %}">
 {% endblock %}
 
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h4>Historial de Transacciones</h4>
+        <h6>Consulta y filtra los movimientos realizados</h6>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-top">
+            <div class="search-set">
+                <div class="search-path">
+                    <a class="btn btn-filter" id="filter_search">
+                        <img src="{% static 'img/icons/filter.svg' %}" alt="img">
+                        <span><img src="{% static 'img/icons/closes.svg' %}" alt="img"></span>
+                    </a>
+                </div>
+                <div class="search-input">
+                    <form action="{% url 'transactions' %}" method="GET" class="d-flex">
+                        <input type="text" name="search" class="form-control" placeholder="Buscar por Nombre o DNI..."
+                            value="{{ search_query }}">
+                        {% if date_query %}
+                        <input type="hidden" name="date" value="{{ date_query }}">
+                        {% endif %}
+                        <input type="submit" style="display: none;">
+                    </form>
+                </div>
+            </div>
+            <div class="wordset">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0);" class="export-pdf" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="pdf"><img src="{% static 'img/icons/pdf.svg' %}"
+                                alt="img"></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="export-excel" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="excel"><img src="{% static 'img/icons/excel.svg' %}"
+                                alt="img"></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="export-print" data-bs-toggle="tooltip"
+                            data-bs-placement="top" title="print"><img src="{% static 'img/icons/printer.svg' %}"
+                                alt="img"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-0" id="filter_inputs" {% if not date_query %}style="display:none;" {% endif %}>
+            <div class="card-body pb-0">
+                <form action="{% url 'transactions' %}" method="GET">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Filtrar por Fecha</label>
+                                <div class="input-groupicon">
+                                    <input type="text" name="date" class="datetimepicker" placeholder="Escoge una fecha"
+                                        value="{{ date_query }}">
+                                    <div class="addonset">
+                                        <img src="{% static 'img/icons/calendars.svg' %}" alt="img">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if search_query %}
+                        <input type="hidden" name="search" value="{{ search_query }}">
+                        {% endif %}
+                        <div class="col-lg-1 col-sm-6 col-12 ms-auto">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button type="submit" class="btn btn-filters ms-auto">
+                                    <img src="{% static 'img/icons/search-whites.svg' %}" alt="img">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="tabla-transacciones" class="table datanew">
+                <thead>
+                    <tr>
+                        <th>Nombre del Cliente</th>
+                        <th>Cédula (DNI)</th>
+                        <th>Fecha</th>
+                        <th>Concepto / Motivo</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaccion in transacciones %}
+                    <tr>
+                        <td>{{ transaccion.id_cliente.nombre|default:"N/A" }}</td>
+                        <td>{{ transaccion.id_cliente.dni|default:"N/A" }}</td>
+                        <td>{{ transaccion.fecha|date:"d-m-Y H:i" }}</td>
+                        <td>{{ transaccion.motivo }}</td>
+                        <td class="price-ves" data-price="{{ transaccion.total }}">{{ transaccion.total }} VES</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No se encontraron transacciones con los criterios
+                            seleccionados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
 {% block scripts %}
 <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
-
+<script src="{% static 'js/moment.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
 <script src="{% static 'js/transacciones.js' %}"></script>
+<script src="{% static 'js/currency_converter.js' %}"></script>
 {% endblock %}

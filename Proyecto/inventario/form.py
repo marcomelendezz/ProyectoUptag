@@ -29,10 +29,10 @@ class LoginForm(forms.Form):
     username = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control form-control-sm',
-            'placeholder': 'Ingresa tu usuario',
+            'placeholder': 'Usuario o Correo Electrónico',
             'autocomplete': 'username'
         }),
-        label="USUARIO",
+        label="Usuario o Correo",
         max_length=100
     )
     password = forms.CharField(
@@ -41,14 +41,14 @@ class LoginForm(forms.Form):
             'placeholder': 'Ingresa tu contraseña',
             'autocomplete': 'current-password'
         }),
-        label="PASSWORD"
+        label="Contraseña"
     )
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({
             'class': 'form-control form-control-sm',
-            'placeholder': 'Ingresa tu usuario',
+            'placeholder': 'Usuario o Correo Electrónico',
             'autocomplete': 'username'
         })
         self.fields['password'].widget.attrs.update({

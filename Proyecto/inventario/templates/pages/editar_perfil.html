@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Editar Perfil{% endblock %}
+
+{% block content %}
+<style>
+    .form-group input[type=email] {
+        border: 1px solid rgba(145, 158, 171, .32);
+        height: 40px;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 500;
+        color: #637381;
+        padding: 10px 15px;
+        border-radius: 5px;
+    }
+
+    .form-group input[type=email]:focus {
+        border-color: #ff9f43;
+        outline: none;
+    }
+</style>
+
+<div class="page-header">
+    <div class="page-title">
+        <h4>Editar Perfil</h4>
+        <h6>Modifica tus datos personales</h6>
+    </div>
+</div>
+
+<form action="{% url 'edit_profile' %}" method="POST">
+    {% csrf_token %}
+
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="form-group">
+                        <label>Nombre completo</label>
+                        <input type="text" name="nombre" value="{{ nombre }}" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" value="{{ email }}" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <hr>
+                    <h5>Cambiar Contraseña (dejar en blanco para no cambiar)</h5>
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="form-group">
+                        <label>Nueva Contraseña</label>
+                        <div class="pass-group">
+                            <input type="password" name="new_password" class="pass-input form-control">
+                            <span class="fas toggle-password fa-eye-slash"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="form-group">
+                        <label>Confirmar Nueva Contraseña</label>
+                        <div class="pass-group">
+                            <input type="password" name="confirm_password" class="pass-inputs form-control">
+                            <span class="fas toggle-passworda fa-eye-slash"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-submit me-2">Guardar Cambios</button>
+                    <a href="{% url 'profile' %}" class="btn btn-cancel">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

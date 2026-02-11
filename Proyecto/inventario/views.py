@@ -218,7 +218,8 @@ def get_productos_servicio(request, servicio_id):
             'id': m.producto.id,
             'nombre': m.producto.nombre,
             'precio': float(m.producto.precio_venta),
-            'stock': m.producto.cantidad_en_stock
+            'stock': m.producto.cantidad_en_stock,
+            'predeterminado': m.es_predeterminado
         } for m in materiales]
     else:
         # Fallback: Si no hay materiales vinculados, mostrar todos los productos activos
@@ -257,7 +258,13 @@ def registrar_venta(request):
             )
             
             # Calcular total
-            total_venta = sum(float(item['precio']) for item in items)
+            def safe_float(val):
+                try:
+                    return float(val) if val else 0.0
+                except (ValueError, TypeError):
+                    return 0.0
+
+            total_venta = sum(safe_float(item.get('precio')) for item in items)
             
             # 2. Crear Movimiento (Venta)
             movimiento = Movimiento.objects.create(
@@ -283,7 +290,7 @@ def registrar_venta(request):
                         id_movimiento=movimiento,
                         id_producto=producto,
                         cantidad=1,
-                        precio_unitario=item['precio']
+                        precio_unitario=safe_float(item.get('precio'))
                     )
                 
                 # Registrar servicio realizado
@@ -292,7 +299,7 @@ def registrar_venta(request):
                         servicio_id=item['servicio_id'],
                         fecha=movimiento.fecha.date(),
                         cliente=cliente.nombre,
-                        costo=item['precio']
+                        costo=safe_float(item.get('precio'))
                     )
 
         return JsonResponse({'success': True})
@@ -342,17 +349,90 @@ def delete_client(request, pk):
     return redirect('clientlist')
 
 
+from django.utils.dateparse import parse_date
+from django.db.models import Q
+from datetime import datetime
+
 @login_required
 def transactions(request):
-    transacciones = Movimiento.objects.all()
+    search_query = request.GET.get('search', '').strip()
+    date_query = request.GET.get('date', '').strip()
+    
+    transacciones = Movimiento.objects.all().order_by('-fecha')
+    
+    if search_query:
+        transacciones = transacciones.filter(
+            Q(id_cliente__nombre__icontains=search_query) |
+            Q(id_cliente__dni__icontains=search_query)
+        )
+        
+    if date_query:
+        try:
+            # Format expected from datetimepicker: DD-MM-YYYY
+            date_obj = datetime.strptime(date_query, '%d-%m-%Y').date()
+            transacciones = transacciones.filter(fecha__date=date_obj)
+        except ValueError:
+            pass
+            
     clientes = Cliente.objects.all()
-    return render(request, 'pages/transacciones.html', {'transacciones': transacciones, 'clientes': clientes})
+    return render(request, 'pages/transacciones.html', {
+        'transacciones': transacciones, 
+        'clientes': clientes,
+        'search_query': search_query,
+        'date_query': date_query
+    })
 
 
-#Urls Perfil
 @login_required
 def profile(request):
     return render(request,'pages/perfil.html' )
+
+from django.contrib.auth import update_session_auth_hash
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        email = request.POST.get('email')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Validaciones de unicidad (solo si cambiaron)
+        if User.objects.filter(username=nombre).exclude(pk=user.pk).exists():
+            messages.error(request, 'El nombre ya está siendo usado por otro usuario.')
+            return render(request, 'pages/editar_perfil.html', {'nombre': nombre, 'email': email})
+        
+        if User.objects.filter(email=email).exclude(pk=user.pk).exists():
+            messages.error(request, 'El correo electrónico ya está registrado por otro usuario.')
+            return render(request, 'pages/editar_perfil.html', {'nombre': nombre, 'email': email})
+
+        user.username = nombre
+        user.first_name = nombre
+        user.email = email
+
+        if new_password:
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request, user)  # Mantener al usuario logueado
+                messages.success(request, 'Perfil y contraseña actualizados correctamente. Ahora puedes iniciar sesión con tu nuevo nombre o correo.')
+            else:
+                messages.error(request, ' las contraseñas no coinciden.')
+                return render(request, 'pages/editar_perfil.html', {
+                    'nombre': nombre,
+                    'email': email
+                })
+        else:
+            user.save()
+            messages.success(request, 'Perfil actualizado correctamente. Ahora puedes iniciar sesión con tu nuevo nombre o correo.')
+        
+        return redirect('profile')
+
+    return render(request, 'pages/editar_perfil.html', {
+        'nombre': user.first_name or user.username,
+        'email': user.email
+    })
 @login_required
 def Hello(request):
     return HttpResponse("Hola")

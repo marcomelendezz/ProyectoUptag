@@ -48,10 +48,14 @@
                 <div class="col-lg-3 col-sm-6 col-12">
                     <div class="form-group">
                         <label>Precio</label>
-                        <input type="text" id="precio" name="precio" value="{{ form_service.precio.value|default:'' }}"
-                            class="form-control {% if form_service.precio.errors %}is-invalid{% endif %}" required>
+                        <div class="input-group">
+                            <input type="number" step="0.01" id="precio" name="precio"
+                                value="{{ form_service.precio.value|default:'' }}"
+                                class="form-control {% if form_service.precio.errors %}is-invalid{% endif %}" required>
+                            <span class="input-group-text">VES</span>
+                        </div>
                         {% for error in form_service.precio.errors %}
-                        <div class="invalid-feedback">{{ error }}</div>
+                        <div class="invalid-feedback d-block">{{ error }}</div>
                         {% endfor %}
                     </div>
                 </div>

@@ -25,7 +25,7 @@ class Producto(models.Model):
     precio_compra = models.DecimalField(max_digits=10, decimal_places=2)
     precio_venta = models.DecimalField(max_digits=10, decimal_places=2)
     cantidad_en_stock = models.IntegerField()
-    proveedor = models.ForeignKey(Proveedor, null=True, blank=True, on_delete=models.CASCADE)
+    proveedor = models.CharField(max_length=100, null=True, blank=True)
     activo = models.BooleanField(default=True)
 
 
@@ -46,6 +46,7 @@ class MaterialServicio(models.Model):
     servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
+    es_predeterminado = models.BooleanField(default=False)
     
 class Movimiento(models.Model):
     id_movimiento = models.AutoField(primary_key=True)
